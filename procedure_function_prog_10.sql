@@ -1,0 +1,16 @@
+CREATE OR REPLACE FUNCTION calculate_age(
+p_emp_id IN NUMBER
+)
+RETURN NUMBER
+IS
+v_dob DATE;
+v_age NUMBER;
+BEGIN
+SELECT EMP_DOB
+INTO v_dob
+FROM EMPLOYEEE
+WHERE E_ID=p_emp_id;
+v_age:=FLOOR(MONTHS_BETWEEN(SYSDATE,v_dob)/12);
+RETURN v_age;
+END;
+/
