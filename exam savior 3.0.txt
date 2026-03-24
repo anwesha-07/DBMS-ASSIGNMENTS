@@ -1,0 +1,171 @@
+-- Create DEPT table
+CREATE TABLE dept (
+    deptno DECIMAL(2,0) DEFAULT NULL,
+    dname VARCHAR(14) DEFAULT NULL,
+    loc VARCHAR(13) DEFAULT NULL
+);
+
+-- Create EMP table
+CREATE TABLE emp (
+    empno DECIMAL(4,0) NOT NULL,
+    ename VARCHAR(10) DEFAULT NULL,
+    job VARCHAR(9) DEFAULT NULL,
+    mgr DECIMAL(4,0) DEFAULT NULL,
+    hiredate DATE DEFAULT NULL,
+    sal DECIMAL(7,2) DEFAULT NULL,
+    comm DECIMAL(7,2) DEFAULT NULL,
+    deptno DECIMAL(2,0) DEFAULT NULL
+);
+
+-- Create SALGRADE table
+CREATE TABLE SALGRADE (
+    GRADE INT NOT NULL PRIMARY KEY,
+    LOSAL INT NOT NULL,
+    HISAL INT NOT NULL
+);
+__________________
+
+INSERT INTO dept VALUES (10, 'ACCOUNTING', 'NEW YORK');
+INSERT INTO dept VALUES (20, 'RESEARCH', 'DALLAS');
+INSERT INTO dept VALUES (30, 'SALES', 'CHICAGO');
+INSERT INTO dept VALUES (40, 'OPERATIONS', 'BOSTON');
+
+_________________
+INSERT INTO SALGRADE VALUES (1, 700, 1200);
+INSERT INTO SALGRADE VALUES (2, 1201, 1400);
+INSERT INTO SALGRADE VALUES (3, 1401, 2000);
+INSERT INTO SALGRADE VALUES (4, 2001, 3000);
+INSERT INTO SALGRADE VALUES (5, 3001, 9999);
+________________
+
+INSERT INTO emp VALUES (7369, 'SMITH', 'CLERK', 7902, '1980-12-17', 800, NULL, 20);
+INSERT INTO emp VALUES (7499, 'ALLEN', 'SALESMAN', 7698, '1981-02-20', 1600, 300, 30);
+INSERT INTO emp VALUES (7521, 'WARD', 'SALESMAN', 7698, '1981-02-22', 1250, 500, 30);
+INSERT INTO emp VALUES (7566, 'JONES', 'MANAGER', 7839, '1981-04-02', 2975, NULL, 20);
+INSERT INTO emp VALUES (7654, 'MARTIN', 'SALESMAN', 7698, '1981-09-28', 1250, 1400, 30);
+INSERT INTO emp VALUES (7698, 'BLAKE', 'MANAGER', 7839, '1981-05-01', 2850, NULL, 30);
+INSERT INTO emp VALUES (7782, 'CLARK', 'MANAGER', 7839, '1981-06-09', 2450, NULL, 10);
+INSERT INTO emp VALUES (7788, 'SCOTT', 'ANALYST', 7566, '1987-04-19', 3000, NULL, 20);
+INSERT INTO emp VALUES (7839, 'KING', 'PRESIDENT', NULL, '1981-11-17', 5000, NULL, 10);
+INSERT INTO emp VALUES (7844, 'TURNER', 'SALESMAN', 7698, '1981-09-08', 1500, 0, 30);
+INSERT INTO emp VALUES (7876, 'ADAMS', 'CLERK', 7788, '1987-05-23', 1100, NULL, 20);
+INSERT INTO emp VALUES (7900, 'JAMES', 'CLERK', 7698, '1981-12-03', 950, NULL, 30);
+INSERT INTO emp VALUES (7902, 'FORD', 'ANALYST', 7566, '1981-12-03', 3000, NULL, 20);
+INSERT INTO emp VALUES (7934, 'MILLER', 'CLERK', 7782, '1982-01-23', 1300, NULL, 10);
+
+---------------------
+
+
+#,Question,SQL Query
+1,Display all details of employees.,
+SELECT * FROM emp;
+2,Display employee name and salary.,
+"SELECT ename, sal FROM emp;"
+3,Display employee name and department number.,
+"SELECT ename, deptno FROM emp;"
+4,Display distinct job titles from the EMP table.,
+SELECT DISTINCT job FROM emp;
+5,Display employees who belong to department number 30.,
+SELECT * FROM emp WHERE deptno = 30;
+6,Display employees whose salary is greater than 2000.,
+SELECT * FROM emp WHERE sal > 2000;
+7,Display employees hired after 01-JAN-1981.,
+SELECT * FROM emp WHERE hiredate > '1981-01-01';
+8,Display employees whose name starts with the letter S.,
+SELECT * FROM emp WHERE ename LIKE 'S%';
+9,Display employees who receive any commission.,
+SELECT * FROM emp WHERE comm IS NOT NULL AND comm > 0;
+10,Display employees whose department number is 10 or 20.,
+"SELECT * FROM emp WHERE deptno IN (10, 20);"
+11,Display all employees sorted by salary in descending order.,
+SELECT * FROM emp ORDER BY sal DESC;
+12,"Display employee name, salary and commission sorted by name.",
+"SELECT ename, sal, comm FROM emp ORDER BY ename;"
+13,Display employees who have no manager.,
+SELECT * FROM emp WHERE mgr IS NULL;
+14,Display the location of department number 20.,
+SELECT loc FROM dept WHERE deptno = 20;
+15,Display department details sorted by department name alphabetically.,
+SELECT * FROM dept ORDER BY dname;
+16,Display employees whose salary is between 1000 and 3000.,
+SELECT * FROM emp WHERE sal BETWEEN 1000 AND 3000;
+17,Count the total number of employees in the EMP table.,
+SELECT COUNT(*) FROM emp;
+18,Display the minimum and maximum salary from the EMP table.,
+"SELECT MIN(sal), MAX(sal) FROM emp;"
+19,Display total number of employees for each job title.,
+"SELECT job, COUNT(*) FROM emp GROUP BY job;"
+20,Display the current system date in MySQL.,
+SELECT CURDATE();
+___________________
+
+
+#,Question,SQL Query
+21,"Display employee name, salary and yearly salary (salary * 12).","SELECT ename, sal, sal * 12 AS yearly_salary FROM emp;"
+22,Display employees who joined in the year 1981.,SELECT * FROM emp WHERE YEAR(hiredate) = 1981;
+23,Display employee details sorted by hire date in descending order.,SELECT * FROM emp ORDER BY hiredate DESC;
+24,Display the average salary of each department.,"SELECT deptno, AVG(sal) FROM emp GROUP BY deptno;"
+25,Display employee name along with department name using a join.,"SELECT e.ename, d.dname FROM emp e JOIN dept d ON e.deptno = d.deptno;"
+26,Display employees earning more than the average salary of the company.,SELECT * FROM emp WHERE sal > (SELECT AVG(sal) FROM emp);
+27,Display employees who have commission in each department.,SELECT * FROM emp WHERE comm IS NOT NULL;
+28,Display employees whose name contains the character A (case-insensitive).,SELECT * FROM emp WHERE ename LIKE '%A%';
+29,Display the highest salary of each job title.,"SELECT job, MAX(sal) FROM emp GROUP BY job;"
+30,Display employees who work in the department located in NEW YORK.,SELECT e.* FROM emp e JOIN dept d ON e.deptno = d.deptno WHERE d.loc = 'NEW YORK';
+31,Display employees who were hired on a Monday.,SELECT * FROM emp WHERE DAYNAME(hiredate) = 'Monday';
+32,Count the number of employees who do not receive commission.,SELECT COUNT(*) FROM emp WHERE comm IS NULL OR comm = 0;
+33,Display job titles along with the total commission paid for each job.,"SELECT job, SUM(comm) FROM emp GROUP BY job;"
+34,Display departments having more than 3 employees.,SELECT deptno FROM emp GROUP BY deptno HAVING COUNT(*) > 3;
+35,Display the employees who draw the second highest salary.,SELECT * FROM emp WHERE sal = (SELECT DISTINCT sal FROM emp ORDER BY sal DESC LIMIT 1 OFFSET 1);
+36,Display employees who have the same job title as SMITH.,SELECT * FROM emp WHERE job = (SELECT job FROM emp WHERE ename = 'SMITH') AND ename <> 'SMITH';
+37,Display each employee's salary grade using the SALGRADE table.,"SELECT e.ename, s.grade FROM emp e JOIN SALGRADE s ON e.sal BETWEEN s.losal AND s.hisal;"
+38,"Display employee name, salary and salary grade together.","SELECT e.ename, e.sal, s.grade FROM emp e JOIN SALGRADE s ON e.sal BETWEEN s.losal AND s.hisal;"
+39,Display employees who are managers.,SELECT * FROM emp WHERE empno IN (SELECT DISTINCT mgr FROM emp WHERE mgr IS NOT NULL);
+40,Display the employee who earns the highest salary in department 30.,SELECT * FROM emp WHERE deptno = 30 AND sal = (SELECT MAX(sal) FROM emp WHERE deptno = 30);
+_______________________________
+
+
+#,Question,SQL Query
+41,Display the employee(s) who earn the highest salary in the company.,SELECT * FROM emp WHERE sal = (SELECT MAX(sal) FROM emp);
+42,Display employees who earn more than the average salary of their department.,SELECT * FROM emp e1 WHERE sal > (SELECT AVG(sal) FROM emp e2 WHERE e1.deptno = e2.deptno);
+43,Display the department having the maximum total salary paid to employees.,SELECT deptno FROM emp GROUP BY deptno ORDER BY SUM(sal) DESC LIMIT 1;
+44,Display employees who joined before their respective manager joined.,SELECT e.* FROM emp e JOIN emp m ON e.mgr = m.empno WHERE e.hiredate < m.hiredate;
+45,Display department details where no employees are working.,SELECT * FROM dept WHERE deptno NOT IN (SELECT DISTINCT deptno FROM emp WHERE deptno IS NOT NULL);
+46,Display the third highest salary using a subquery.,SELECT DISTINCT sal FROM emp e1 WHERE 3 = (SELECT COUNT(DISTINCT sal) FROM emp e2 WHERE e2.sal >= e1.sal);
+47,Display the count of employees hired month-wise.,"SELECT MONTHNAME(hiredate), COUNT(*) FROM emp GROUP BY MONTHNAME(hiredate);"
+48,Display employees who joined after the employee FORD joined.,SELECT * FROM emp WHERE hiredate > (SELECT hiredate FROM emp WHERE ename = 'FORD');
+49,Display the employees whose department number is not present in the DEPT table.,SELECT * FROM emp WHERE deptno NOT IN (SELECT deptno FROM dept);
+50,Display job titles along with the difference between max and min salary of that job.,"SELECT job, (MAX(sal) - MIN(sal)) AS diff FROM emp GROUP BY job;"
+51,Display employee names along with the length of each name.,"SELECT ename, LENGTH(ename) FROM emp;"
+52,Display salaries formatted to two decimal places.,"SELECT ename, FORMAT(sal, 2) FROM emp;"
+53,Display each employee name masked after the first three characters.,"SELECT CONCAT(LEFT(ename, 3), '****') FROM emp;"
+54,"Display employee name and commission, replacing NULL with ""No Commission"".","SELECT ename, COALESCE(CAST(comm AS CHAR), 'No Commission') FROM emp;"
+55,"Create a view to display employee name, salary and department name.","CREATE VIEW emp_details AS SELECT e.ename, e.sal, d.dname FROM emp e JOIN dept d ON e.deptno = d.deptno;"
+56,Update the salary of employees in dept 30 by increasing it by 10 percent.,UPDATE emp SET sal = sal * 1.10 WHERE deptno = 30;
+57,Delete employees who do not belong to any department.,DELETE FROM emp WHERE deptno IS NULL OR deptno NOT IN (SELECT deptno FROM dept);
+58,"Insert a new department with department number 50 and name ""HR"".","INSERT INTO dept (deptno, dname) VALUES (50, 'HR');"
+59,Display employees working in the same department as BLAKE.,SELECT * FROM emp WHERE deptno = (SELECT deptno FROM emp WHERE ename = 'BLAKE') AND ename <> 'BLAKE';
+60,Display employees whose job title appears more than once in the EMP table.,SELECT * FROM emp WHERE job IN (SELECT job FROM emp GROUP BY job HAVING COUNT(*) > 1);
+61,Display employee details whose salary is higher than the max salary in dept 10.,SELECT * FROM emp WHERE sal > (SELECT MAX(sal) FROM emp WHERE deptno = 10);
+62,Display employees who earn more than every employee in department 30.,SELECT * FROM emp WHERE sal > ALL (SELECT sal FROM emp WHERE deptno = 30);
+63,Display departments where all employees earn a commission.,SELECT deptno FROM emp GROUP BY deptno HAVING COUNT(comm) = COUNT(*);
+64,Display employees whose salary matches the average salary of their own dept.,SELECT * FROM emp e1 WHERE sal = (SELECT AVG(sal) FROM emp e2 WHERE e1.deptno = e2.deptno);
+65,Display job title and employees whose salary is below the average of that job.,"SELECT ename, job, sal FROM emp e1 WHERE sal < (SELECT AVG(sal) FROM emp e2 WHERE e1.job = e2.job);"
+66,Display employees who have the minimum salary in their respective job.,SELECT * FROM emp e1 WHERE sal = (SELECT MIN(sal) FROM emp e2 WHERE e1.job = e2.job);
+67,Display employees in a dept located in the same city as KING's department.,SELECT * FROM emp WHERE deptno IN (SELECT deptno FROM dept WHERE loc = (SELECT loc FROM dept d JOIN emp e ON d.deptno = e.deptno WHERE e.ename = 'KING'));
+68,Display employees whose salary is not within any salary grade range.,SELECT * FROM emp WHERE sal NOT BETWEEN (SELECT MIN(losal) FROM SALGRADE) AND (SELECT MAX(hisal) FROM SALGRADE);
+69,Display employees who earn the second highest salary in each department.,SELECT * FROM emp e1 WHERE 2 = (SELECT COUNT(DISTINCT sal) FROM emp e2 WHERE e2.deptno = e1.deptno AND e2.sal >= e1.sal);
+70,Display employees whose department has at least one manager working in it.,SELECT * FROM emp WHERE deptno IN (SELECT DISTINCT deptno FROM emp WHERE job = 'MANAGER');
+71,Display departments where no manager is assigned.,SELECT dname FROM dept WHERE deptno NOT IN (SELECT DISTINCT deptno FROM emp WHERE job = 'MANAGER');
+72,Display employees who earn a salary that falls into the highest grade.,SELECT * FROM emp WHERE sal BETWEEN (SELECT losal FROM SALGRADE WHERE grade = 5) AND (SELECT hisal FROM SALGRADE WHERE grade = 5);
+73,Display employees who have the same salary as someone in a different dept.,SELECT * FROM emp e1 WHERE EXISTS (SELECT 1 FROM emp e2 WHERE e1.sal = e2.sal AND e1.deptno <> e2.deptno);
+74,Display the employee with the earliest hire date in each dept (correlated).,SELECT * FROM emp e1 WHERE hiredate = (SELECT MIN(hiredate) FROM emp e2 WHERE e1.deptno = e2.deptno);
+75,Display depts with less than the average number of employees per dept.,SELECT deptno FROM emp GROUP BY deptno HAVING COUNT(*) < (SELECT AVG(cnt) FROM (SELECT COUNT(*) AS cnt FROM emp GROUP BY deptno) AS temp);
+76,Display employees whose managers work in a different location than them.,SELECT e.ename FROM emp e JOIN emp m ON e.mgr = m.empno JOIN dept de ON e.deptno = de.deptno JOIN dept dm ON m.deptno = dm.deptno WHERE de.loc <> dm.loc;
+77,Display employees in the department where the total salary is the highest.,SELECT * FROM emp WHERE deptno = (SELECT deptno FROM emp GROUP BY deptno ORDER BY SUM(sal) DESC LIMIT 1);
+78,Display dept name and employees earning more than the average of all managers.,"SELECT d.dname, e.ename FROM emp e JOIN dept d ON e.deptno = d.deptno WHERE e.sal > (SELECT AVG(sal) FROM emp WHERE job = 'MANAGER');"
+79,Display dept name and employee name for employees earning more than their manager.,"SELECT d.dname, e.ename FROM emp e JOIN dept d ON e.deptno = d.deptno JOIN emp m ON e.mgr = m.empno WHERE e.sal > m.sal;"
+80,"Display name, salary, and dept name for employees within salary grade 3.","SELECT e.ename, e.sal, d.dname FROM emp e JOIN dept d ON e.deptno = d.deptno JOIN SALGRADE s ON e.sal BETWEEN s.losal AND s.hisal WHERE s.grade = 3;"
+
+
+
+
